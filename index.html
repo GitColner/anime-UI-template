@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dong-Hua Anime</title>
+    <link rel="icon" href="images/webp.png" type="image/png" sizes="32x32" >
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #1a1a1a, #333);
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        header {
+            background: linear-gradient(to bottom, #111, #222);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo h1 {
+            font-size: 20px;
+            color: #e50914;
+            font-weight: bold;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+
+        .search-container input {
+            width: 0;
+            height: 30px;
+            border: none;
+            outline: none;
+            background: #222;
+            color: #fff;
+            border-radius: 5px;
+            padding: 0 10px;
+            transition: width 0.3s ease;
+        }
+
+        .search-container input:focus {
+            width: 200px;
+            border: 1px solid #e50914;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .search-container input::placeholder {
+            color: #aaa;
+            font-style: italic;
+        }
+
+        .search-container button {
+            background: #e50914;
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            margin-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-container button:hover {
+            background: #f0141e;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 5px 10px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        nav a:hover {
+            background: #e50914;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .hero {
+            height: 400px;
+            background: url('https://wallpaperaccess.com/full/5471847.jpg') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: inset 0 -50px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+            color: #fff;
+        }
+
+        .category {
+            padding: 30px 20px;
+        }
+
+        .category h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #e50914;
+            text-shadow: 1px 1px 4px #000;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .movie-card {
+            background-color: #222;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            border: 1px solid transparent;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.6);
+            border: 1px solid #e50914;
+        }
+
+        .movie-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 2px solid #e50914;
+        }
+
+        .movie-card h3 {
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #e50914;
+            text-shadow: 1px 1px 4px #000;
+        }
+
+        .modal-content p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="images/webp.png" alt="Dong-Hua Anime Logo">
+            <h1>Dong-Hua Anime</h1>
+            <div class="search-container">
+                <input type="text" placeholder="Search anime..." id="search-input" />
+                <button id="search-btn">Search</button>
+            </div>
+        </div>
+        <nav>
+            <a href="#home" target="_main">Home</a>
+            <a href="#tv-shows" target="_main">TV Shows</a>
+            <a href="#my-list" target="_main">My List</a>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <h1>Welcome to Dong-Hua Anime!</h1>
+    </section>
+
+    <section class="category" id="tv-shows">
+        <h2>Popular TV Shows</h2>
+        <div class="movie-grid">
+            <div class="movie-card">
+                <a href="https://img.uhdpaper.com/wallpaper/satoru-gojo-with-sunglasses-jujutsu-kaisen-601@2@a-pc-4k.jpg"><img
+                        alt="Ultra HD 4K Satoru Gojo with Sunglasses 3840x2160 Wallpaper." class="" height="517" id="imgT"
+                        src="https://img.uhdpaper.com/wallpaper/satoru-gojo-with-sunglasses-jujutsu-kaisen-601@2@a-preview.jpg?dl"
+                        width="919" data-src="https://img.uhdpaper.com/wallpaper/satoru-gojo-with-sunglasses-jujutsu-kaisen-601@2@a-preview.jpg?dl">
+                </a>
+                <h3>jujtsu kaisan</h3>
+            </div>
+            <div class="movie-card">
+                <img src="https://wallpapers-clan.com/wp-content/uploads/2024/04/one-punch-man-saitama-epic-desktop-wallpaper-preview.jpg"
+                    alt="Desktop Wallpaper 4K" width="1536" height="864">
+                <h3>One Punch Man</h3>
+            </div>
+            <div class="movie-card">
+                <img itemprop="contentUrl" alt="Demon Slayer, Manga, Anime, Kny, HD phone wallpaper"
+                    title="Demon Slayer, Manga, Anime, Kny, HD phone wallpaper"
+                    src="https://w0.peakpx.com/wallpaper/358/749/HD-wallpaper-demon-slayer-manga-anime-kny.jpg">
+                <h3>Demon Slayer</h3>
+            </div>
+        </div>
+    </section>
+
+    <section class="category" id="movies">
+        <h2>Trending Movies</h2>
+        <div class="movie-grid">
+            <div class="movie-card">
+                <img src="https://img1.wallspic.com/crops/9/2/0/8/7/178029/178029-your_name_anime-mitsuha_miyamizu-animated_cartoon-anime_art-animation-3840x2160.jpg"
+                    alt="Your Name Anime, Mitsuha Miyamizu, Animated Cartoon, Anime Art, Animation. Wallpaper in 3840x2160 Resolution">
+                <h3>Your Name </h3>
+            </div>
+            <div class="movie-card">
+                <img id="main-content" class="main-content" width="2912" height="1632"
+                    src="https://images4.alphacoders.com/135/thumb-1920-1357584.png"
+                    alt="HD wallpaper of Madara Uchiha from Naruto, holding a glowing orb, set against a dynamic blue night sky background."
+                    title="Madara Uchiha Anime HD Wallpaper - Naruto Series Power Display by patrika">
+                <h3>Narouto</h3>
+            </div>
+            <div class="movie-card">
+                <a href="https://img.uhdpaper.com/wallpaper/luffy-scar-one-piece-264@3@a-pc-4k.jpg"><img
+                        alt="Ultra HD 4K Luffy Scar One Piece += 3840x2160 Wallpaper." class="" height="517" id="imgT"
+                        src="https://img.uhdpaper.com/wallpaper/luffy-scar-one-piece-264@3@a-preview.jpg?dl" width="919"
+                        data-src="https://img.uhdpaper.com/wallpaper/luffy-scar-one-piece-264@3@a-preview.jpg?dl">
+                </a>
+                <h3>one piece</h3>
+            </div>
+        </div>
+    </section>
+
+    <section class="category" id="my-list">
+        <h2>My List</h2>
+        <div class="movie-grid">
+            <div class="movie-card">
+                <img src="images/btth (2).jpg" alt="Image not Found:">
+                <h3>BTTH</h3>
+            </div>
+            <div class="movie-card">
+                <img src="images/anime-ss.jpg" alt="Image not Found:">
+                <h3>Swallowed Star</h3>
+            </div>
+            <div class="movie-card">
+                <img src="images/pfw.jpg" alt="Image not Found:">
+                <h3>Perfect World</h3>
+            </div>
+            <div class="movie-card">
+                <img src="images/x.jpeg" alt="Image not Found:">
+                <h3>Martial Imortal</h3>
+            </div>
+            <div class="movie-card">
+                <img src="images/ri.jpg" alt="Image not Found:">
+                <h3>Shrounding the Heavens </h3>
+            </div>
+            <div class="movie-card">
+                <img src="images/one.webp" alt="Image not Found:">
+                <h3>
+                    A Will Eternal Season 3
+                </h3>
+            </div>
+            <div class="movie-card">
+                <img src="images/hq.jpg" alt="Image not Found:">
+                <h3>Five Element God of War</h3>
+            </div>
+        </div>
+    </section>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-description">This is a description of the movie.</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let modal = document.getElementById("myModal");
+        let modalTitle = document.getElementById("modal-title");
+        let modalDescription = document.getElementById("modal-description");
+        let closeBtn = document.querySelector(".close");
+
+        function openModal(movieName) {
+            modal.style.display = "block";
+            modalTitle.innerText = movieName;
+            modalDescription.innerText = `This is a description of the movie ${movieName}.`;
+        }
+
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        let searchInput = document.getElementById("search-input");
+        let searchBtn = document.getElementById("search-btn");
+        searchBtn.addEventListener("click", () => {
+            let searchQuery = searchInput.value.trim();
+            if (searchQuery !== "") {
+                
+                console.log(`Searching for: ${searchQuery}`);
+                searchInput.value = "";
+            }
+        });
+        
+        
+        let movieCards = document.querySelectorAll('.movie-card');
+        movieCards.forEach((card) => {
+            card.addEventListener('click', () => {
+                openModal(card.querySelector('h3').textContent);
+            });
+        });
+    </script>
+</body>
+</html>
